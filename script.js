@@ -6,8 +6,8 @@ let roadPosition = 0;
 let lastTime = 0;
 let isAccelerating = false;
 let isDecelerating = false;
-const MAX_SPEED = 120; // Maximum speed in km/h
-let targetCruiseSpeed = 60; // Default target cruise speed in km/h
+const MAX_SPEED = 360; // Maximum speed in km/h
+let targetCruiseSpeed = 216; // Default target cruise speed in km/h
 let laneSet1, laneSet2; // Declare these at the global scope
 
 // Initialize the road and lane markers
@@ -150,7 +150,7 @@ function toggleCruise() {
 }
 
 function increaseCruiseSpeed() {
-  targetCruiseSpeed = Math.min(MAX_SPEED, targetCruiseSpeed + 5);
+  targetCruiseSpeed = Math.min(MAX_SPEED, targetCruiseSpeed + 18);
   if (cruiseEnabled) {
     cruiseSpeed = targetCruiseSpeed;
   }
@@ -158,7 +158,7 @@ function increaseCruiseSpeed() {
 }
 
 function decreaseCruiseSpeed() {
-  targetCruiseSpeed = Math.max(0, targetCruiseSpeed - 5);
+  targetCruiseSpeed = Math.max(0, targetCruiseSpeed - 18);
   if (cruiseEnabled) {
     cruiseSpeed = targetCruiseSpeed;
   }
