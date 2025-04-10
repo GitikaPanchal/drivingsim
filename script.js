@@ -135,7 +135,10 @@ function accelerate() {
 }
 
 function decelerate() {
-  if (!cruiseEnabled && speed > 0) speed -= 0.5; // Reduced deceleration rate
+  if (!cruiseEnabled && speed > 0) {
+    speed -= 0.5;
+    if (speed < 0) speed = 0;
+  }
 }
 
 function toggleCruise() {
