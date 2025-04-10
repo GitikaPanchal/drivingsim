@@ -91,6 +91,7 @@
         background: #fff;
         border: 1px solid #ccc;
         border-radius: 10px;
+        position: relative;
       }
       .mechanical-diagram svg {
         width: 100%;
@@ -177,6 +178,66 @@
         font-size: 16px;
         z-index: 12;
       }
+
+      /* Popup modal styles */
+      .mechanical-part {
+        cursor: pointer;
+      }
+      .mechanical-part:hover {
+        opacity: 0.8;
+      }
+      #infoPopup {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+        justify-content: center;
+        align-items: center;
+      }
+      .popup-content {
+        background-color: #fff;
+        width: 80%;
+        max-width: 500px;
+        border-radius: 8px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        padding: 20px;
+        position: relative;
+      }
+      .popup-title {
+        color: #5cb85c;
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 10px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #eee;
+      }
+      .popup-description {
+        color: #333;
+        font-size: 14px;
+        line-height: 1.5;
+      }
+      .popup-close {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        font-size: 24px;
+        color: #999;
+        cursor: pointer;
+        background: none;
+        border: none;
+        padding: 0;
+        width: 30px;
+        height: 30px;
+        line-height: 30px;
+        text-align: center;
+      }
+      .popup-close:hover {
+        color: #555;
+      }
     </style>
   </head>
   <body>
@@ -212,7 +273,12 @@
       <div class="mechanical-diagram">
         <svg viewBox="0 0 300 200">
           <!-- Driver Input Section -->
-          <g id="driver-input">
+          <g
+            id="driver-input"
+            class="mechanical-part"
+            data-title="Accelerator Pedal"
+            data-description="The driver's primary control for adjusting vehicle speed. When pressed, it sends a mechanical signal to the throttle, increasing fuel flow to the engine and raising vehicle speed. The pedal is spring-loaded to return to idle position when released."
+          >
             <rect
               x="10"
               y="40"
@@ -228,7 +294,12 @@
           </g>
 
           <!-- Cruise Control Switch -->
-          <g id="cruise-switch">
+          <g
+            id="cruise-switch"
+            class="mechanical-part"
+            data-title="Cruise Control Switch"
+            data-description="Activates the cruise control system, allowing the vehicle to maintain a constant speed without driver input on the accelerator. When engaged, it tells the ECU to take over throttle control. The indicator light shows when the system is active."
+          >
             <rect
               x="10"
               y="90"
@@ -252,7 +323,12 @@
           </g>
 
           <!-- ECU (Electronic Control Unit) -->
-          <g id="ecu-unit">
+          <g
+            id="ecu-unit"
+            class="mechanical-part"
+            data-title="Electronic Control Unit (ECU)"
+            data-description="The 'brain' of the cruise control system. It receives input from the speed sensor and cruise control switch, then calculates the appropriate throttle position to maintain the desired speed. The ECU uses a closed-loop feedback system to make continuous adjustments."
+          >
             <rect
               x="100"
               y="130"
@@ -278,7 +354,12 @@
           </g>
 
           <!-- Speed Sensor -->
-          <g id="speed-sensor">
+          <g
+            id="speed-sensor"
+            class="mechanical-part"
+            data-title="Speed Sensor"
+            data-description="Monitors the vehicle's actual speed by measuring wheel rotation or driveshaft movement. It converts mechanical motion into electronic signals that the ECU can interpret. Without accurate speed data, the cruise control system cannot function properly."
+          >
             <circle
               cx="100"
               cy="90"
@@ -298,7 +379,12 @@
           </g>
 
           <!-- Throttle Actuator -->
-          <g id="throttle">
+          <g
+            id="throttle"
+            class="mechanical-part"
+            data-title="Throttle Actuator"
+            data-description="Controls the opening and closing of the throttle valve that regulates airflow to the engine. In cruise control mode, the ECU sends signals to the actuator to adjust throttle position automatically. During normal driving, it responds to the accelerator pedal position."
+          >
             <rect
               x="190"
               y="60"
@@ -322,7 +408,12 @@
           </g>
 
           <!-- Engine -->
-          <g id="engine">
+          <g
+            id="engine"
+            class="mechanical-part"
+            data-title="Engine"
+            data-description="Converts fuel energy into mechanical power to drive the vehicle. The engine's power output is directly controlled by the throttle position. When cruise control is active, the ECU maintains consistent engine power to hold a steady speed despite changing conditions like hills or wind resistance."
+          >
             <rect
               x="240"
               y="120"
@@ -410,8 +501,71 @@
             stroke-dasharray="3,2"
             fill="none"
             id="feedback-loop"
-          />
+            class="mechanical-part"
+            data-title="Feedback Loop"
+            data-description="The critical closed-loop system that enables cruise control. As engine power changes vehicle speed, the speed sensor detects these changes and sends updated information to the ECU. The ECU then adjusts throttle position to maintain the target speed, creating a continuous self-correcting system."
+          ></path>
+
+          <!-- Control connections -->
+          <g
+            class="mechanical-part"
+            data-title="Manual Control Path"
+            data-description="Direct mechanical or electronic connection from the accelerator pedal to the throttle. When cruise control is off, this is the active control path allowing the driver to directly manage vehicle speed."
+          >
+            <line
+              x1="120"
+              y1="60"
+              x2="125"
+              y2="65"
+              stroke="transparent"
+              stroke-width="20"
+              id="manual-control-tooltip"
+            />
+          </g>
+
+          <g
+            class="mechanical-part"
+            data-title="Cruise Command Signal"
+            data-description="Electronic signal sent from the cruise control switch to the ECU. This signal initiates cruise control mode and sets the desired speed that the system will maintain."
+          >
+            <line
+              x1="70"
+              y1="115"
+              x2="75"
+              y2="120"
+              stroke="transparent"
+              stroke-width="20"
+              id="cruise-command-tooltip"
+            />
+          </g>
+
+          <g
+            class="mechanical-part"
+            data-title="ECU Control Signal"
+            data-description="Electronic commands sent from the ECU to the throttle actuator. These precise signals adjust the throttle position to maintain consistent speed when cruise control is active."
+          >
+            <line
+              x1="170"
+              y1="110"
+              x2="175"
+              y2="115"
+              stroke="transparent"
+              stroke-width="20"
+              id="ecu-control-tooltip"
+            />
+          </g>
         </svg>
+      </div>
+    </div>
+
+    <!-- Info Popup Modal -->
+    <div id="infoPopup">
+      <div class="popup-content">
+        <button class="popup-close">&times;</button>
+        <div class="popup-title">Component Info</div>
+        <div class="popup-description">
+          Information about the component will appear here.
+        </div>
       </div>
     </div>
 
@@ -491,6 +645,40 @@
             container.appendChild(label);
           }
         }
+      }
+
+      // Setup popup functionality
+      function setupPopup() {
+        const popup = document.getElementById("infoPopup");
+        const popupTitle = document.querySelector(".popup-title");
+        const popupDescription = document.querySelector(".popup-description");
+        const closeButton = document.querySelector(".popup-close");
+
+        // Close popup when clicking close button
+        closeButton.addEventListener("click", () => {
+          popup.style.display = "none";
+        });
+
+        // Close popup when clicking outside the content
+        popup.addEventListener("click", (e) => {
+          if (e.target === popup) {
+            popup.style.display = "none";
+          }
+        });
+
+        // Setup click handlers for mechanical parts
+        document.querySelectorAll(".mechanical-part").forEach((part) => {
+          part.addEventListener("click", function () {
+            const title = this.getAttribute("data-title");
+            const description = this.getAttribute("data-description");
+
+            if (title && description) {
+              popupTitle.textContent = title;
+              popupDescription.textContent = description;
+              popup.style.display = "flex";
+            }
+          });
+        });
       }
 
       // Setup event listeners for button press/release
@@ -743,6 +931,46 @@
         document
           .getElementById("feedback-loop")
           .setAttribute("d", "M280,165 Q300,190 240,190 Q170,190 100,75");
+
+        // Position tooltip trigger points
+        document
+          .getElementById("manual-control-tooltip")
+          .setAttribute("x1", "120");
+        document
+          .getElementById("manual-control-tooltip")
+          .setAttribute("y1", "60");
+        document
+          .getElementById("manual-control-tooltip")
+          .setAttribute("x2", "125");
+        document
+          .getElementById("manual-control-tooltip")
+          .setAttribute("y2", "65");
+
+        document
+          .getElementById("cruise-command-tooltip")
+          .setAttribute("x1", "70");
+        document
+          .getElementById("cruise-command-tooltip")
+          .setAttribute("y1", "115");
+        document
+          .getElementById("cruise-command-tooltip")
+          .setAttribute("x2", "75");
+        document
+          .getElementById("cruise-command-tooltip")
+          .setAttribute("y2", "120");
+
+        document
+          .getElementById("ecu-control-tooltip")
+          .setAttribute("x1", "170");
+        document
+          .getElementById("ecu-control-tooltip")
+          .setAttribute("y1", "110");
+        document
+          .getElementById("ecu-control-tooltip")
+          .setAttribute("x2", "175");
+        document
+          .getElementById("ecu-control-tooltip")
+          .setAttribute("y2", "115");
       }
 
       function simulateDrive(currentTime) {
@@ -791,9 +1019,13 @@
         createSpeedometerMarkings();
         updateMechanicalDiagramSpacing();
         setupEventListeners();
+        setupPopup();
 
         // Start the animation loop
         requestAnimationFrame(simulateDrive);
+
+        // Add a title to the mechanical diagram
+        document.querySelector(".mechanical-diagram").prepend(diagramTitle);
       });
     </script>
   </body>
