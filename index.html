@@ -18,9 +18,10 @@
         <h2>Dashboard</h2>
         <p>Speed: <span id="speed">0</span> km/h</p>
         <p>Cruise Control: <span id="cruiseStatus">OFF</span></p>
+        <!-- Update the buttons to remove onclick attributes - we'll add event listeners in JS instead -->
         <div id="controls">
-          <button onclick="accelerate()">Accelerate</button>
-          <button onclick="decelerate()">Decelerate</button>
+          <button>Accelerate</button>
+          <button>Decelerate</button>
           <button onclick="toggleCruise()">Toggle Cruise Control</button>
         </div>
         <hr />
