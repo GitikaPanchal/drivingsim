@@ -1,0 +1,74 @@
+body {
+  margin: 0;
+  display: flex;
+  font-family: Arial, sans-serif;
+}
+#game {
+  flex: 2;
+  height: 100vh;
+  background: linear-gradient(#555, #222);
+  position: relative;
+  overflow: hidden;
+}
+#dashboard {
+  flex: 1;
+  background: #f4f4f4;
+  padding: 20px;
+  box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+#road {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: #333;
+  overflow: hidden;
+}
+.lane-set {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  will-change: transform;
+}
+/* Modified lane-line style to make it look like actual road markers */
+.lane-line {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 10px;
+  height: 30px; /* Shorter lines */
+  background: white;
+  border-radius: 2px; /* Slightly rounded edges */
+}
+#car {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%) rotate(180deg);
+  width: 60px;
+  height: 120px;
+  background: url("car.png") no-repeat center center;
+  background-size: cover;
+}
+#controls button {
+  margin-top: 10px;
+  padding: 10px;
+  width: 100%;
+}
+.mechanical-diagram {
+  margin-top: 20px;
+  padding: 10px;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+}
+.mechanical-diagram svg {
+  width: 100%;
+  height: 200px;
+}
+.mechanical-label {
+  font-size: 12px;
+  fill: #000;
+}

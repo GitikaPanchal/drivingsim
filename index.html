@@ -5,82 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Cruise Control Simulator</title>
     <link rel="icon" href="steering.png" type="image/png" />
-    <style>
-      body {
-        margin: 0;
-        display: flex;
-        font-family: Arial, sans-serif;
-      }
-      #game {
-        flex: 2;
-        height: 100vh;
-        background: linear-gradient(#555, #222);
-        position: relative;
-        overflow: hidden;
-      }
-      #dashboard {
-        flex: 1;
-        background: #f4f4f4;
-        padding: 20px;
-        box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-      }
-      #road {
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        background: #333;
-        overflow: hidden;
-      }
-      .lane-set {
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        will-change: transform;
-      }
-      /* Modified lane-line style to make it look like actual road markers */
-      .lane-line {
-        position: absolute;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 10px;
-        height: 30px; /* Shorter lines */
-        background: white;
-        border-radius: 2px; /* Slightly rounded edges */
-      }
-      #car {
-        position: absolute;
-        bottom: 20px;
-        left: 50%;
-        transform: translateX(-50%) rotate(180deg);
-        width: 60px;
-        height: 120px;
-        background: url("car.png") no-repeat center center;
-        background-size: cover;
-      }
-      #controls button {
-        margin-top: 10px;
-        padding: 10px;
-        width: 100%;
-      }
-      .mechanical-diagram {
-        margin-top: 20px;
-        padding: 10px;
-        background: #fff;
-        border: 1px solid #ccc;
-        border-radius: 10px;
-      }
-      .mechanical-diagram svg {
-        width: 100%;
-        height: 200px;
-      }
-      .mechanical-label {
-        font-size: 12px;
-        fill: #000;
-      }
-    </style>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="script.js" defer></script>
   </head>
   <body>
     <div id="game">
@@ -101,159 +27,212 @@
         <h3>Mechanics</h3>
         <p id="mechanicsLog">Waiting for action...</p>
       </div>
-      <div class="mechanical-diagram">
-        <h4>Internal Mechanics View</h4>
-        <svg viewBox="0 0 200 200">
-          <rect x="10" y="40" width="40" height="20" fill="#ccc" />
-          <text x="30" y="35" class="mechanical-label" text-anchor="middle">
-            Pedal
-          </text>
 
+      <div class="mechanical-diagram">
+        <h4>Cruise Control System Diagram</h4>
+        <svg viewBox="0 0 300 200">
+          <!-- Driver Input Section -->
+          <g id="driver-input">
+            <rect
+              x="10"
+              y="40"
+              width="40"
+              height="20"
+              fill="#ddd"
+              stroke="#999"
+              stroke-width="1"
+            />
+            <text x="30" y="35" class="mechanical-label" text-anchor="middle">
+              Accelerator Pedal
+            </text>
+          </g>
+
+          <!-- Cruise Control Switch -->
+          <g id="cruise-switch">
+            <rect
+              x="10"
+              y="90"
+              width="40"
+              height="20"
+              fill="#ddd"
+              stroke="#999"
+              stroke-width="1"
+            />
+            <text x="30" y="85" class="mechanical-label" text-anchor="middle">
+              Cruise Control Switch
+            </text>
+            <rect
+              id="cruise-indicator"
+              x="15"
+              y="95"
+              width="10"
+              height="10"
+              fill="gray"
+            />
+          </g>
+
+          <!-- ECU (Electronic Control Unit) -->
+          <g id="ecu-unit">
+            <rect
+              x="100"
+              y="130"
+              width="60"
+              height="40"
+              fill="#eee"
+              stroke="#999"
+              stroke-width="1"
+            />
+            <text x="130" y="125" class="mechanical-label" text-anchor="middle">
+              ECU
+            </text>
+            <circle id="ecuLight" cx="115" cy="150" r="8" fill="gray" />
+            <text
+              x="115"
+              y="170"
+              class="mechanical-label"
+              text-anchor="middle"
+              font-size="10"
+            >
+              Status
+            </text>
+          </g>
+
+          <!-- Speed Sensor -->
+          <g id="speed-sensor">
+            <circle
+              cx="100"
+              cy="90"
+              r="15"
+              fill="#eee"
+              stroke="#999"
+              stroke-width="1"
+            />
+            <text x="100" y="75" class="mechanical-label" text-anchor="middle">
+              Speed Sensor
+            </text>
+            <path
+              d="M95,90 L105,90 M100,85 L100,95"
+              stroke="#333"
+              stroke-width="1"
+            />
+          </g>
+
+          <!-- Throttle Actuator -->
+          <g id="throttle">
+            <rect
+              x="190"
+              y="60"
+              width="40"
+              height="30"
+              fill="#eee"
+              stroke="#999"
+              stroke-width="1"
+            />
+            <text x="210" y="55" class="mechanical-label" text-anchor="middle">
+              Throttle Actuator
+            </text>
+            <rect
+              id="throttle-position"
+              x="195"
+              y="70"
+              width="30"
+              height="10"
+              fill="#aaa"
+            />
+          </g>
+
+          <!-- Engine -->
+          <g id="engine">
+            <rect
+              x="240"
+              y="120"
+              width="50"
+              height="40"
+              fill="#ddd"
+              stroke="#999"
+              stroke-width="1"
+              rx="5"
+              ry="5"
+            />
+            <text x="265" y="115" class="mechanical-label" text-anchor="middle">
+              Engine
+            </text>
+            <path
+              d="M245,135 L250,130 L255,135 L260,130 L265,135 L270,130 L275,135 L280,130 L285,135"
+              stroke="#666"
+              stroke-width="1.5"
+              fill="none"
+            />
+          </g>
+
+          <!-- Connection Lines -->
+          <!-- Driver to Throttle -->
           <line
             x1="50"
             y1="50"
-            x2="100"
-            y2="50"
-            stroke="#000"
-            stroke-width="2"
+            x2="190"
+            y2="75"
+            stroke="#333"
+            stroke-width="1.5"
+            stroke-dasharray="4,2"
+            id="manual-control"
           />
-          <circle cx="100" cy="50" r="10" fill="#aaa" />
-          <text x="100" y="30" class="mechanical-label" text-anchor="middle">
-            Throttle
-          </text>
 
+          <!-- Cruise Switch to ECU -->
+          <line
+            x1="50"
+            y1="100"
+            x2="100"
+            y2="130"
+            stroke="#333"
+            stroke-width="1.5"
+            id="cruise-command"
+          />
+
+          <!-- Speed Sensor to ECU -->
           <line
             x1="100"
-            y1="50"
-            x2="150"
-            y2="100"
-            stroke="#000"
-            stroke-width="2"
+            y1="105"
+            x2="110"
+            y2="130"
+            stroke="#333"
+            stroke-width="1.5"
+            id="speed-data"
           />
-          <rect x="140" y="100" width="20" height="20" fill="#ccc" />
-          <text x="150" y="135" class="mechanical-label" text-anchor="middle">
-            Engine
-          </text>
 
-          <circle id="ecuLight" cx="100" cy="150" r="10" fill="gray" />
-          <text x="100" y="170" class="mechanical-label" text-anchor="middle">
-            ECU
-          </text>
+          <!-- ECU to Throttle -->
+          <line
+            x1="160"
+            y1="140"
+            x2="190"
+            y2="85"
+            stroke="#333"
+            stroke-width="1.5"
+            id="ecu-control"
+          />
+
+          <!-- Throttle to Engine -->
+          <line
+            x1="230"
+            y1="75"
+            x2="240"
+            y2="120"
+            stroke="#333"
+            stroke-width="1.5"
+            id="throttle-input"
+          />
+
+          <!-- Feedback From Engine to Speed Sensor -->
+          <path
+            d="M265,160 Q280,180 230,180 Q180,180 100,105"
+            stroke="#333"
+            stroke-width="1"
+            stroke-dasharray="3,2"
+            fill="none"
+            id="feedback-loop"
+          />
         </svg>
       </div>
     </div>
-
-    <script>
-      let speed = 0;
-      let cruiseEnabled = false;
-      let cruiseSpeed = 0;
-      let roadPosition = 0;
-      let lastTime = 0;
-
-      const road = document.getElementById("road");
-
-      // Clear existing lane markers
-      road.innerHTML = "";
-
-      // Create two sets of lane markers that we'll animate in parallel
-      const laneSet1 = document.createElement("div");
-      laneSet1.className = "lane-set";
-      laneSet1.style.position = "absolute";
-      laneSet1.style.width = "100%";
-      laneSet1.style.height = "100%";
-      laneSet1.style.top = "0";
-
-      const laneSet2 = document.createElement("div");
-      laneSet2.className = "lane-set";
-      laneSet2.style.position = "absolute";
-      laneSet2.style.width = "100%";
-      laneSet2.style.height = "100%";
-      laneSet2.style.top = "-100%";
-
-      road.appendChild(laneSet1);
-      road.appendChild(laneSet2);
-
-      // Create realistic dashed lane markers with proper spacing
-      // Highway lane markers are typically about 10 feet long with 30 feet gaps
-      // We'll simulate this with a visual ratio
-      const lineCount = 15; // Fewer lines with bigger gaps
-      const gapRatio = 3; // Gap is 3 times the length of the line
-
-      for (let i = 0; i < lineCount; i++) {
-        const linePosition =
-          i * (1 + gapRatio) * (100 / (lineCount * (1 + gapRatio)));
-
-        const line1 = document.createElement("div");
-        line1.className = "lane-line";
-        line1.style.top = `${linePosition}%`;
-        laneSet1.appendChild(line1);
-
-        const line2 = document.createElement("div");
-        line2.className = "lane-line";
-        line2.style.top = `${linePosition}%`;
-        laneSet2.appendChild(line2);
-      }
-
-      function updateUI() {
-        document.getElementById("speed").innerText = speed.toFixed(1);
-        document.getElementById("cruiseStatus").innerText = cruiseEnabled
-          ? `ON (${cruiseSpeed} km/h)`
-          : "OFF";
-        document.getElementById("mechanicsLog").innerText = cruiseEnabled
-          ? `ECU is controlling the throttle to maintain ${cruiseSpeed} km/h.`
-          : "Driver manually pressing the pedal to change speed.";
-        document
-          .getElementById("ecuLight")
-          .setAttribute("fill", cruiseEnabled ? "green" : "gray");
-      }
-
-      function accelerate() {
-        if (!cruiseEnabled) speed += 5;
-      }
-
-      function decelerate() {
-        if (!cruiseEnabled && speed > 0) speed -= 5;
-      }
-
-      function toggleCruise() {
-        if (!cruiseEnabled && speed > 0) {
-          cruiseEnabled = true;
-          cruiseSpeed = speed.toFixed(1);
-        } else {
-          cruiseEnabled = false;
-        }
-        updateUI();
-      }
-
-      function simulateDrive(currentTime) {
-        if (!lastTime) lastTime = currentTime;
-        const deltaTime = (currentTime - lastTime) / 1000;
-        lastTime = currentTime;
-
-        if (cruiseEnabled) {
-          speed += (cruiseSpeed - speed) * 0.05;
-        }
-
-        if (speed > 0) {
-          // Update road position with positive value (0-100%)
-          roadPosition += speed * deltaTime * 0.5;
-
-          // When position exceeds 100%, reset to continue the loop
-          if (roadPosition >= 100) {
-            roadPosition = 0;
-          }
-
-          // Apply transforms to both lane sets
-          laneSet1.style.transform = `translateY(${roadPosition}%)`;
-          laneSet2.style.transform = `translateY(${roadPosition}%)`;
-        }
-
-        updateUI();
-        requestAnimationFrame(simulateDrive);
-      }
-
-      // Start the animation loop
-      requestAnimationFrame(simulateDrive);
-    </script>
   </body>
 </html>
