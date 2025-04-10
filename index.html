@@ -680,6 +680,8 @@
       }
 
       // Setup event listeners for button press/release
+      // Update your setupEventListeners function by modifying the accelerator and brake button events
+
       function setupEventListeners() {
         const accelButton = document.querySelector(
           "#controls button:nth-child(1)"
@@ -691,6 +693,11 @@
 
         // Accelerator button events
         accelButton.addEventListener("mousedown", function () {
+          // If cruise is enabled, turn it off
+          if (cruiseEnabled) {
+            cruiseEnabled = false;
+            updateUI();
+          }
           isAccelerating = true;
           accelButton.classList.add("active");
         });
@@ -707,6 +714,11 @@
 
         // Brake button events
         brakeButton.addEventListener("mousedown", function () {
+          // If cruise is enabled, turn it off
+          if (cruiseEnabled) {
+            cruiseEnabled = false;
+            updateUI();
+          }
           isDecelerating = true;
           brakeButton.classList.add("active");
         });
@@ -721,22 +733,33 @@
           brakeButton.classList.remove("active");
         });
 
-        // Touch events for mobile
+        // Same change for touch events
         accelButton.addEventListener("touchstart", function (e) {
           e.preventDefault();
+          // If cruise is enabled, turn it off
+          if (cruiseEnabled) {
+            cruiseEnabled = false;
+            updateUI();
+          }
           isAccelerating = true;
           accelButton.classList.add("active");
         });
 
+        brakeButton.addEventListener("touchstart", function (e) {
+          e.preventDefault();
+          // If cruise is enabled, turn it off
+          if (cruiseEnabled) {
+            cruiseEnabled = false;
+            updateUI();
+          }
+          isDecelerating = true;
+          brakeButton.classList.add("active");
+        });
+
+        // Keep the remaining event listeners unchanged
         accelButton.addEventListener("touchend", function () {
           isAccelerating = false;
           accelButton.classList.remove("active");
-        });
-
-        brakeButton.addEventListener("touchstart", function (e) {
-          e.preventDefault();
-          isDecelerating = true;
-          brakeButton.classList.add("active");
         });
 
         brakeButton.addEventListener("touchend", function () {
